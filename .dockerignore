@@ -1,0 +1,4 @@
+.env
+.web-server-pid
+node_modules
+var
