@@ -33,3 +33,15 @@ services:
 
     App\Util\OfxBuilder:
         public: true
+
+    PHPExcel_Reader_Excel5:
+        class: PHPExcel_Reader_Excel5
+        shared: false
+        factory: ['PHPExcel_IOFactory', createReader]
+        arguments: ['Excel5']
+
+    PHPExcel_Reader_CSV:
+        class: PHPExcel_Reader_CSV
+        shared: false
+        factory: ['PHPExcel_IOFactory', createReader]
+        arguments: ['CSV']

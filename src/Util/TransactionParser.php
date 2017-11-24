@@ -37,16 +37,37 @@ class TransactionParser
     protected $transactionFlattener;
 
     /**
+     * @var FinderKeyCreator
+     */
+    protected $finderKeyCreator;
+
+    /**
+     * @var \PHPExcel_Reader_Excel5
+     */
+    protected $excelReader;
+
+    /**
+     * @var \PHPExcel_Reader_Excel5
+     */
+    protected $csvReader;
+
+    /**
      * TransactionParser constructor.
      * @param RedsysStatementParser     $redsysStatementParser
      * @param SabadellConsignmentParser $consignmentParser
      * @param TransactionFlattener      $transactionFlattener
+     * @param FinderKeyCreator          $finderKeyCreator
+     * @param \PHPExcel_Reader_Excel5   $excelReader
+     * @param \PHPExcel_Reader_CSV      $csvReader
      */
-    public function __construct(RedsysStatementParser $redsysStatementParser, SabadellConsignmentParser $consignmentParser, TransactionFlattener $transactionFlattener)
+    public function __construct(RedsysStatementParser $redsysStatementParser, SabadellConsignmentParser $consignmentParser, TransactionFlattener $transactionFlattener, FinderKeyCreator $finderKeyCreator, \PHPExcel_Reader_Excel5 $excelReader, \PHPExcel_Reader_CSV $csvReader)
     {
         $this->redsysStatementParser = $redsysStatementParser;
         $this->consignmentParser = $consignmentParser;
         $this->transactionFlattener = $transactionFlattener;
+        $this->finderKeyCreator = $finderKeyCreator;
+        $this->excelReader = $excelReader;
+        $this->csvReader = $csvReader;
     }
 
     /**
@@ -57,18 +78,14 @@ class TransactionParser
      */
     public function parseTransactionList(File $consignmentFile, File $transactionFile)
     {
-        /** @var \PHPExcel_Reader_Excel5 $reader */
-        $reader = \PHPExcel_IOFactory::createReader('Excel5');
-        $consignmentSheet = $reader->load($consignmentFile->getPathname())->getActiveSheet();
+        $consignmentSheet = $this->excelReader->load($consignmentFile->getPathname())->getActiveSheet();
         $consignmentData = $this->consignmentParser->parseConsignmentFile($consignmentSheet);
 
-        $consignmentFinder = new ConsignmentFinder($consignmentData);
+        $consignmentFinder = new ConsignmentFinder($consignmentData, $this->finderKeyCreator);
 
-        /** @var \PHPExcel_Reader_CSV $reader */
-        $reader = \PHPExcel_IOFactory::createReader('CSV');
-        $reader->setInputEncoding('ISO-8859-1');
-        $reader->setDelimiter(';');
-        $transactionSheet = $reader->load($transactionFile->getPathname())->getActiveSheet();
+        $this->csvReader->setInputEncoding('ISO-8859-1');
+        $this->csvReader->setDelimiter(';');
+        $transactionSheet = $this->csvReader->load($transactionFile->getPathname())->getActiveSheet();
         $transactionData = $this->redsysStatementParser->parse($transactionSheet, $consignmentFinder);
 
         return $this->transactionFlattener->flatten($transactionData);

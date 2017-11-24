@@ -21,6 +21,20 @@ use App\Exception\InvalidStatementException;
 class SabadellConsignmentParser
 {
     /**
+     * @var FinderKeyCreator
+     */
+    protected $finderKeyCreator;
+
+    /**
+     * SabadellConsignmentParser constructor.
+     * @param FinderKeyCreator $finderKeyCreator
+     */
+    public function __construct(FinderKeyCreator $finderKeyCreator)
+    {
+        $this->finderKeyCreator = $finderKeyCreator;
+    }
+
+    /**
      * @param \PHPExcel_Worksheet $sheet
      *
      * @return array
@@ -49,7 +63,7 @@ class SabadellConsignmentParser
                 $amount = floatval(str_replace(',', '.', $sheet->getCell('D'.$currentRow)->getValue()));
                 $consignment = intval($sheet->getCell('H'.$currentRow)->getValue());
 
-                $key = $timestamp->format('Ymd').$lastDigits.sprintf('%.2f', $amount);
+                $key = $this->finderKeyCreator->createIndex($timestamp, $lastDigits, $amount);
 
                 $transactions[$key] = $consignment;
 

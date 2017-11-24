@@ -18,15 +18,25 @@ namespace App\Util;
  */
 class ConsignmentFinder
 {
+    /**
+     * @var array
+     */
     protected $table;
 
     /**
-     * OrderNumberFinder constructor.
-     * @param array $table
+     * @var FinderKeyCreator
      */
-    public function __construct($table)
+    protected $finderKeyCreator;
+
+    /**
+     * OrderNumberFinder constructor.
+     * @param array            $table
+     * @param FinderKeyCreator $finderKeyCreator
+     */
+    public function __construct($table, FinderKeyCreator $finderKeyCreator)
     {
         $this->table = $table;
+        $this->finderKeyCreator = $finderKeyCreator;
     }
 
     /**
@@ -38,12 +48,12 @@ class ConsignmentFinder
      */
     public function findConsignment(\DateTime $date, $cardNumberLast, $amount)
     {
-        $key = $date->format('Ymd').$cardNumberLast.sprintf('%.2f', $amount);
+        $key = $this->finderKeyCreator->createIndex($date, $cardNumberLast, $amount);
 
         if (!isset($this->table[$key])) {
             $datePlusOne = clone $date;
             $datePlusOne->add(\DateInterval::createFromDateString('1 day'));
-            $key = $date->format('Ymd').$cardNumberLast.sprintf('%.2f', $amount);
+            $key = $this->finderKeyCreator->createIndex($datePlusOne, $cardNumberLast, $amount);
         }
 
         return isset($this->table[$key]) ? $this->table[$key] : null;
