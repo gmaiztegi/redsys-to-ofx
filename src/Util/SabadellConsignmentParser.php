@@ -43,7 +43,7 @@ class SabadellConsignmentParser
      */
     public function parseConsignmentFile(\PHPExcel_Worksheet $sheet)
     {
-        if (0 !== strpos($sheet->getCell('A1'), "CONSULTA DE OPERACIONES LIQUIDADAS A COMERCIOS")) {
+        if (0 !== strpos($sheet->getCell('A1')->getValue(), "CONSULTA DE OPERACIONES LIQUIDADAS A COMERCIOS")) {
             throw new InvalidStatementException("The spreadsheet doesn't seem to be a valid consignment report.");
         }
 
@@ -51,7 +51,7 @@ class SabadellConsignmentParser
         $transactions = array();
 
         do {
-            $firstColumn = $sheet->getCell('A'.$currentRow);
+            $firstColumn = $sheet->getCell('A'.$currentRow)->getValue();
 
             $matches = array();
 
@@ -70,7 +70,7 @@ class SabadellConsignmentParser
                 ++$currentRow;
             } elseif (preg_match("/Nº operaciones ([0-9]+)/", $firstColumn, $matches)) {
                 $currentRow += 6;
-            } elseif (empty($firstColumn->getValue())) {
+            } elseif (empty($firstColumn)) {
                 break;
             } else {
                 throw new InvalidStatementException(sprintf("Spreadsheet doesn't match format in row number %d.", $currentRow));
