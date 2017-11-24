@@ -34,8 +34,8 @@ class RedsysStatementParser
         $transactions = array();
         $currentRow = 2;
 
-        while (!empty($sheet->getCell('a'.$currentRow)->getValue())) {
-            $date = \DateTime::createFromFormat('d/m/Y H:i:s', $sheet->getCell('A'.$currentRow));
+        while (!empty($sheet->getCell('A'.$currentRow)->getValue())) {
+            $date = \DateTime::createFromFormat('d/m/Y H:i:s', $sheet->getCell('A'.$currentRow)->getValue());
             $orderNumber = $sheet->getCell('D'.$currentRow)->getValue();
             list($success, $code) = sscanf($sheet->getCell('E'.$currentRow)->getValue(), '%s %s');
             $amount = sscanf($sheet->getCell('F'.$currentRow)->getValue(), '%f EUR')[0];
