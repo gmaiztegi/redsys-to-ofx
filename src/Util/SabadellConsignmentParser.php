@@ -44,7 +44,7 @@ class SabadellConsignmentParser
     public function parseConsignmentFile(\PHPExcel_Worksheet $sheet)
     {
         if (0 !== strpos($sheet->getCell('A1'), "CONSULTA DE OPERACIONES LIQUIDADAS A COMERCIOS")) {
-            throw new \InvalidArgumentException("The spreadsheet doesn't seem to be a valid consignment report.");
+            throw new InvalidStatementException("The spreadsheet doesn't seem to be a valid consignment report.");
         }
 
         $currentRow = 6;
