@@ -51,12 +51,17 @@ class FeatureContext implements Context, MinkAwareContext
      */
     public function theResponseIsLoadableOnPython()
     {
-        $process = new Process("python3 tests/resources/parseofx.py");
+        $temp = tmpfile();
+        fwrite($temp, $this->mink->getSession()->getPage()->getContent());
+        $filename = stream_get_meta_data($temp)['uri'];
+
+        $process = new Process("python3 tests/resources/parseofx.py < $filename");
         $process
-            ->setInput($this->mink->getSession()->getPage()->getContent())
             ->setTimeout(10)
             ->run()
         ;
+
+        fclose($temp);
 
         if (!$process->isSuccessful()) {
             throw new ProcessFailedException($process);
