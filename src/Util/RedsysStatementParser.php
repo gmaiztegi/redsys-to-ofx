@@ -21,6 +21,13 @@ use App\Exception\InvalidStatementException;
  */
 class RedsysStatementParser
 {
+    const COLUMN_DATETIME = 'Fecha';
+    const COLUMN_ORDER_NUMBER = 'Número de pedido';
+    const COLUMN_RESULT = 'Resultado operación y código';
+    const COLUMN_AMOUNT = 'Importe';
+    const COLUMN_TYPE = 'Tipo operación';
+    const COLUMN_CARD_NUMBER = 'Nº Tarjeta';
+
     /**
      * @param \PHPExcel_Worksheet $sheet
      * @param ConsignmentFinder   $consignmentFinder
@@ -34,14 +41,26 @@ class RedsysStatementParser
         $transactions = array();
         $currentRow = 2;
 
-        while (!empty($sheet->getCell('A'.$currentRow)->getValue())) {
-            $date = \DateTime::createFromFormat('d/m/Y H:i:s', $sheet->getCell('A'.$currentRow)->getValue());
-            $orderNumber = $sheet->getCell('D'.$currentRow)->getValue();
-            list($success, $code) = sscanf($sheet->getCell('E'.$currentRow)->getValue(), '%s %s');
-            $amount = sscanf($sheet->getCell('F'.$currentRow)->getValue(), '%f EUR')[0];
-            $type = $sheet->getCell('C'.$currentRow)->getValue();
+        $columnMapping = $this->parseHeader($sheet);
+
+        /**
+         * @param $column string
+         * @param $row int
+         *
+         * @return mixed The value
+         */
+        $getColumn = function ($column, $row) use ($sheet, $columnMapping) {
+            return $sheet->getCell($columnMapping[$column].$row)->getValue();
+        };
+
+        while (!empty($getColumn(self::COLUMN_DATETIME, $currentRow))) {
+            $date = \DateTime::createFromFormat('d/m/Y H:i:s', $getColumn(self::COLUMN_DATETIME, $currentRow));
+            $orderNumber = $getColumn(self::COLUMN_ORDER_NUMBER, $currentRow);
+            list($success, $code) = sscanf($getColumn(self::COLUMN_RESULT, $currentRow), '%s %s');
+            $amount = sscanf($getColumn(self::COLUMN_AMOUNT, $currentRow), '%f EUR')[0];
+            $type = $getColumn(self::COLUMN_TYPE, $currentRow);
             $amount = "Devolución" === $type ? -$amount : $amount;
-            list($firstDigits, $lastDigits) = sscanf($sheet->getCell('H'.$currentRow)->getValue(), '%d******%4s');
+            list($firstDigits, $lastDigits) = sscanf($getColumn(self::COLUMN_CARD_NUMBER, $currentRow), '%d******%4s');
 
             if ("Autorizada" !== $success) {
                 ++$currentRow;
@@ -76,5 +95,29 @@ class RedsysStatementParser
         }
 
         return $transactions;
+    }
+
+    private function parseHeader(\PHPExcel_Worksheet $sheet) {
+
+        $mapping = array(
+            self::COLUMN_DATETIME => '',
+            self::COLUMN_ORDER_NUMBER => '',
+            self::COLUMN_RESULT => '',
+            self::COLUMN_AMOUNT => '',
+            self::COLUMN_TYPE => '',
+            self::COLUMN_CARD_NUMBER => '',
+        );
+
+        foreach (range('A', $sheet->getHighestColumn()) as $columnKey) {
+            $mapping[$sheet->getCell($columnKey.'1')->getValue()] = $columnKey;
+        }
+
+        foreach ($mapping as $key => $value) {
+            if (empty($value)) {
+                throw new InvalidStatementException(sprintf('Missing column "%s" in statement.', $key));
+            }
+        }
+
+        return $mapping;
     }
 }
