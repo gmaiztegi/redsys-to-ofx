@@ -24,6 +24,14 @@ class RedsysStatementParserSpec extends ObjectBehavior
 
     function it_parses_the_file(\PHPExcel_Worksheet $sheet,
         ConsignmentFinder $consignmentFinder,
+        \PHPExcel_Cell $a1Cell,
+        \PHPExcel_Cell $b1Cell,
+        \PHPExcel_Cell $c1Cell,
+        \PHPExcel_Cell $d1Cell,
+        \PHPExcel_Cell $e1Cell,
+        \PHPExcel_Cell $f1Cell,
+        \PHPExcel_Cell $g1Cell,
+        \PHPExcel_Cell $h1Cell,
         \PHPExcel_Cell $a2Cell,
         \PHPExcel_Cell $c2Cell,
         \PHPExcel_Cell $d2Cell,
@@ -38,6 +46,25 @@ class RedsysStatementParserSpec extends ObjectBehavior
         \PHPExcel_Cell $h3Cell,
         \PHPExcel_Cell $a4Cell
     ) {
+        $a1Cell->getValue()->willReturn("Fecha");
+        $b1Cell->getValue()->willReturn("Nº de terminal");
+        $c1Cell->getValue()->willReturn("Tipo operación");
+        $d1Cell->getValue()->willReturn("Número de pedido");
+        $e1Cell->getValue()->willReturn("Resultado operación y código");
+        $f1Cell->getValue()->willReturn("Importe");
+        $g1Cell->getValue()->willReturn("Cierre de sesión");
+        $h1Cell->getValue()->willReturn("Nº Tarjeta");
+
+        $sheet->getCell('A1')->willReturn($a1Cell);
+        $sheet->getCell('B1')->willReturn($b1Cell);
+        $sheet->getCell('C1')->willReturn($c1Cell);
+        $sheet->getCell('D1')->willReturn($d1Cell);
+        $sheet->getCell('E1')->willReturn($e1Cell);
+        $sheet->getCell('F1')->willReturn($f1Cell);
+        $sheet->getCell('G1')->willReturn($g1Cell);
+        $sheet->getCell('H1')->willReturn($h1Cell);
+        $sheet->getHighestColumn()->willReturn('H');
+
         $consignment1 = "1";
         $dateString1 = "03/01/2017 11:10:13";
         $date1 = \DateTime::createFromFormat('d/m/Y H:i:s', $dateString1);
@@ -78,6 +105,7 @@ class RedsysStatementParserSpec extends ObjectBehavior
         $sheet->getCell("A4")->willReturn($a4Cell);
 
         $result = $this->parse($sheet, $consignmentFinder);
+
         $result->shouldHaveCount(2);
         $result[$consignment1][0]->getDate()->shouldBeLike($date1);
         $result[$consignment1][0]->getOrderNumber()->shouldBe("ES-11111");
