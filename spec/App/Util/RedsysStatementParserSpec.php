@@ -11,19 +11,14 @@
 
 namespace spec\App\Util;
 
+use App\Exception\InvalidStatementException;
 use App\Util\ConsignmentFinder;
 use App\Util\RedsysStatementParser;
 use PhpSpec\ObjectBehavior;
 
 class RedsysStatementParserSpec extends ObjectBehavior
 {
-    function it_is_initializable()
-    {
-        $this->shouldHaveType(RedsysStatementParser::class);
-    }
-
-    function it_parses_the_file(\PHPExcel_Worksheet $sheet,
-        ConsignmentFinder $consignmentFinder,
+    function let(\PHPExcel_Worksheet $sheet,
         \PHPExcel_Cell $a1Cell,
         \PHPExcel_Cell $b1Cell,
         \PHPExcel_Cell $c1Cell,
@@ -65,6 +60,45 @@ class RedsysStatementParserSpec extends ObjectBehavior
         $sheet->getCell('H1')->willReturn($h1Cell);
         $sheet->getHighestColumn()->willReturn('H');
 
+        $sheet->getCell('A2')->willReturn($a2Cell);
+        $sheet->getCell('C2')->willReturn($c2Cell);
+        $sheet->getCell('D2')->willReturn($d2Cell);
+        $sheet->getCell('E2')->willReturn($e2Cell);
+        $sheet->getCell('F2')->willReturn($f2Cell);
+        $sheet->getCell('H2')->willReturn($h2Cell);
+
+        $sheet->getCell('A3')->willReturn($a3Cell);
+        $sheet->getCell('C3')->willReturn($c3Cell);
+        $sheet->getCell('D3')->willReturn($d3Cell);
+        $sheet->getCell('E3')->willReturn($e3Cell);
+        $sheet->getCell('F3')->willReturn($f3Cell);
+        $sheet->getCell('H3')->willReturn($h3Cell);
+
+        $a4Cell->getValue()->willReturn("");
+        $sheet->getCell("A4")->willReturn($a4Cell);
+    }
+
+    function it_is_initializable()
+    {
+        $this->shouldHaveType(RedsysStatementParser::class);
+    }
+
+    function it_parses_the_file(\PHPExcel_Worksheet $sheet,
+        ConsignmentFinder $consignmentFinder,
+        \PHPExcel_Cell $a2Cell,
+        \PHPExcel_Cell $c2Cell,
+        \PHPExcel_Cell $d2Cell,
+        \PHPExcel_Cell $e2Cell,
+        \PHPExcel_Cell $f2Cell,
+        \PHPExcel_Cell $h2Cell,
+        \PHPExcel_Cell $a3Cell,
+        \PHPExcel_Cell $c3Cell,
+        \PHPExcel_Cell $d3Cell,
+        \PHPExcel_Cell $e3Cell,
+        \PHPExcel_Cell $f3Cell,
+        \PHPExcel_Cell $h3Cell,
+        \PHPExcel_Cell $a4Cell
+    ) {
         $consignment1 = "1";
         $dateString1 = "03/01/2017 11:10:13";
         $date1 = \DateTime::createFromFormat('d/m/Y H:i:s', $dateString1);
@@ -76,13 +110,6 @@ class RedsysStatementParserSpec extends ObjectBehavior
         $h2Cell->getValue()->willReturn("4589******1234");
         $consignmentFinder->findConsignment($date1, "1234", 16.00)->willReturn($consignment1);
 
-        $sheet->getCell('A2')->willReturn($a2Cell);
-        $sheet->getCell('C2')->willReturn($c2Cell);
-        $sheet->getCell('D2')->willReturn($d2Cell);
-        $sheet->getCell('E2')->willReturn($e2Cell);
-        $sheet->getCell('F2')->willReturn($f2Cell);
-        $sheet->getCell('H2')->willReturn($h2Cell);
-
         $consignment2 = "2";
         $dateString2 = "04/01/2017 11:12:13";
         $date2 = \DateTime::createFromFormat('d/m/Y H:i:s', $dateString2);
@@ -93,13 +120,6 @@ class RedsysStatementParserSpec extends ObjectBehavior
         $f3Cell->getValue()->willReturn("20.00 EUR");
         $h3Cell->getValue()->willReturn("4589******9876");
         $consignmentFinder->findConsignment($date2, "9876", 20.00)->willReturn($consignment2);
-
-        $sheet->getCell('A3')->willReturn($a3Cell);
-        $sheet->getCell('C3')->willReturn($c3Cell);
-        $sheet->getCell('D3')->willReturn($d3Cell);
-        $sheet->getCell('E3')->willReturn($e3Cell);
-        $sheet->getCell('F3')->willReturn($f3Cell);
-        $sheet->getCell('H3')->willReturn($h3Cell);
 
         $a4Cell->getValue()->willReturn("");
         $sheet->getCell("A4")->willReturn($a4Cell);
@@ -117,5 +137,14 @@ class RedsysStatementParserSpec extends ObjectBehavior
         $result[$consignment2][0]->getCode()->shouldBe("987654");
         $result[$consignment2][0]->getAmount()->shouldBe(20.00);
         $result[$consignment2][0]->getCardNumberLast()->shouldBe("9876");
+    }
+
+    function it_throws_exception_when_column_is_missing(\PHPExcel_Worksheet $sheet,
+        ConsignmentFinder $consignmentFinder,
+        \PHPExcel_Cell $a1Cell) {
+
+        $a1Cell->getValue()->willReturn('NotADate');
+
+        $this->shouldThrow(new InvalidStatementException('Missing column "Fecha" in statement.'))->duringParse($sheet, $consignmentFinder);
     }
 }
