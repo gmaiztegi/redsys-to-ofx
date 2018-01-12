@@ -19,15 +19,15 @@ Feature:
 
   Scenario: It checks that the file is an Excel file
     Given I am on the homepage
-    When I attach the file "blank.txt" to "mniredsys_to_ofx_bundle_redsys_statement_type_consignmentStatement"
+    When I attach the file "blank.txt" to "consignmentStatement"
     And I press "Submit"
     Then I should see "The mime type of the file is invalid"
 
   Scenario: It creates an OFX statement when sending a valid file
     Given I am on the homepage
-    When I fill in "mniredsys_to_ofx_bundle_redsys_statement_type_commerceId" with "123456789"
-    And I attach the file "sabadell-consignment.xls" to "mniredsys_to_ofx_bundle_redsys_statement_type_consignmentStatement"
-    And I attach the file "redsys-statements.csv" to "mniredsys_to_ofx_bundle_redsys_statement_type_transactionStatement"
+    When I fill in "commerceId" with "123456789"
+    And I attach the file "sabadell-consignment.xls" to "consignmentStatement"
+    And I attach the file "redsys-statements.csv" to "transactionStatement"
     And I press "Submit"
     Then the response status code should be 200
     And the response should contain "OFXHEADER:100"
@@ -36,8 +36,8 @@ Feature:
 
   Scenario: It shows the missing column in the statement
     Given I am on the homepage
-    When I fill in "mniredsys_to_ofx_bundle_redsys_statement_type_commerceId" with "123456789"
-    And I attach the file "sabadell-consignment.xls" to "mniredsys_to_ofx_bundle_redsys_statement_type_consignmentStatement"
-    And I attach the file "redsys-statements-no-date.csv" to "mniredsys_to_ofx_bundle_redsys_statement_type_transactionStatement"
+    When I fill in "commerceId" with "123456789"
+    And I attach the file "sabadell-consignment.xls" to "consignmentStatement"
+    And I attach the file "redsys-statements-no-date.csv" to "transactionStatement"
     And I press "Submit"
     Then I should see "Fecha" in the ".alert" element

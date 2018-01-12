@@ -13,7 +13,6 @@ namespace App\Form;
 
 use App\Entity\RedsysStatement;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -34,10 +33,10 @@ class RedsysStatementType extends AbstractType
             ->add('commerceId', null, array(
                 'label' => "Commerce id",
             ))
-            ->add('consignmentStatement', FileType::class, array(
+            ->add('consignmentStatement', null, array(
                 'label' => 'Consignment Statement (.xls)',
             ))
-            ->add('transactionStatement', FileType::class, array(
+            ->add('transactionStatement', null, array(
                 'label' => 'Redsys transactions (.csv)',
             ))
             ->add('submit', SubmitType::class, array(
@@ -61,6 +60,6 @@ class RedsysStatementType extends AbstractType
      */
     public function getBlockPrefix()
     {
-        return 'mniredsys_to_ofx_bundle_redsys_statement_type';
+        return '';
     }
 }
