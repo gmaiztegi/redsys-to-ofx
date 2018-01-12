@@ -117,9 +117,9 @@ class RedsysStatementParserSpec extends ObjectBehavior
         $c3Cell->getValue()->willReturn("Autorización");
         $d3Cell->getValue()->willReturn("ES-22222");
         $e3Cell->getValue()->willReturn("Autorizada 987654");
-        $f3Cell->getValue()->willReturn("20.00 EUR");
+        $f3Cell->getValue()->willReturn("29.69 EUR (27.48 GBP)");
         $h3Cell->getValue()->willReturn("4589******9876");
-        $consignmentFinder->findConsignment($date2, "9876", 20.00)->willReturn($consignment2);
+        $consignmentFinder->findConsignment($date2, "9876", 29.69)->willReturn($consignment2);
 
         $a4Cell->getValue()->willReturn("");
         $sheet->getCell("A4")->willReturn($a4Cell);
@@ -131,12 +131,52 @@ class RedsysStatementParserSpec extends ObjectBehavior
         $result[$consignment1][0]->getOrderNumber()->shouldBe("ES-11111");
         $result[$consignment1][0]->getCode()->shouldBe("123456");
         $result[$consignment1][0]->getAmount()->shouldBe(16.00);
+        $result[$consignment1][0]->getOriginalAmount()->shouldBe(null);
+        $result[$consignment1][0]->getOriginalCurrency()->shouldBe(null);
         $result[$consignment1][0]->getCardNumberLast()->shouldBe("1234");
         $result[$consignment2][0]->getDate()->shouldBeLike($date2);
         $result[$consignment2][0]->getOrderNumber()->shouldBe("ES-22222");
         $result[$consignment2][0]->getCode()->shouldBe("987654");
-        $result[$consignment2][0]->getAmount()->shouldBe(20.00);
+        $result[$consignment2][0]->getAmount()->shouldBe(29.69);
+        $result[$consignment2][0]->getOriginalAmount()->shouldBe(null);
+        $result[$consignment2][0]->getOriginalCurrency()->shouldBe(null);
         $result[$consignment2][0]->getCardNumberLast()->shouldBe("9876");
+    }
+
+    function it_parses_currencies_different_than_euros(\PHPExcel_Worksheet $sheet,
+        ConsignmentFinder $consignmentFinder,
+        \PHPExcel_Cell $a2Cell,
+        \PHPExcel_Cell $c2Cell,
+        \PHPExcel_Cell $d2Cell,
+        \PHPExcel_Cell $e2Cell,
+        \PHPExcel_Cell $f2Cell,
+        \PHPExcel_Cell $h2Cell,
+        \PHPExcel_Cell $a3Cell
+    ) {
+        $consignment1 = "1";
+        $dateString1 = "03/01/2017 11:10:13";
+        $date1 = \DateTime::createFromFormat('d/m/Y H:i:s', $dateString1);
+        $a2Cell->getValue()->willReturn($dateString1);
+        $c2Cell->getValue()->willReturn("Autorización");
+        $d2Cell->getValue()->willReturn("ES-11111");
+        $e2Cell->getValue()->willReturn("Autorizada 123456");
+        $f2Cell->getValue()->willReturn("42.00 GBP (47.81)");
+        $h2Cell->getValue()->willReturn("4589******1234");
+        $consignmentFinder->findConsignment($date1, "1234", 47.81)->willReturn($consignment1);
+
+        $a3Cell->getValue()->willReturn("");
+        $sheet->getCell("A3")->willReturn($a3Cell);
+
+        $result = $this->parse($sheet, $consignmentFinder);
+
+        $result->shouldHaveCount(1);
+        $result[$consignment1][0]->getDate()->shouldBeLike($date1);
+        $result[$consignment1][0]->getOrderNumber()->shouldBe("ES-11111");
+        $result[$consignment1][0]->getCode()->shouldBe("123456");
+        $result[$consignment1][0]->getAmount()->shouldBe(47.81);
+        $result[$consignment1][0]->getOriginalAmount()->shouldBe(42.00);
+        $result[$consignment1][0]->getOriginalCurrency()->shouldBe("GBP");
+        $result[$consignment1][0]->getCardNumberLast()->shouldBe("1234");
     }
 
     function it_throws_exception_when_column_is_missing(\PHPExcel_Worksheet $sheet,
