@@ -33,3 +33,11 @@ Feature:
     And the response should contain "OFXHEADER:100"
     And the response should contain "<ACCTID>123456789</ACCTID>"
     And the response is loadable on python
+
+  Scenario: It shows the missing column in the statement
+    Given I am on the homepage
+    When I fill in "mniredsys_to_ofx_bundle_redsys_statement_type_commerceId" with "123456789"
+    And I attach the file "sabadell-consignment.xls" to "mniredsys_to_ofx_bundle_redsys_statement_type_consignmentStatement"
+    And I attach the file "redsys-statements-no-date.csv" to "mniredsys_to_ofx_bundle_redsys_statement_type_transactionStatement"
+    And I press "Submit"
+    Then I should see "Fecha" in the ".alert" element
