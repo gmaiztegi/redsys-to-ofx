@@ -43,7 +43,7 @@ NEWFILEUID:NONE
                             <TRNAMT>{{ transaction.amount | number_format(2, '.', '') }}</TRNAMT>
                             <FITID>{{ commerce_code }}:{{ transaction.code }}{{ (transaction.cardNumberLast is not empty) ? ':' ~ transaction.orderNumber ~ ':' ~ transaction.cardNumberLast : '' }}{{ (transaction.amount < 0 and transaction.cardNumberLast is not empty) ? ':REFUND' : '' }}</FITID>
                             <REFNUM>{{ transaction.code }}</REFNUM>
-                            <NAME>{{ (transaction.cardNumberLast is not empty) ? transaction.cardNumberLast : transaction.code }}</NAME>
+                            <NAME>{{ (transaction.payerName is not empty) ? transaction.payerName : transaction.code }}</NAME>
                             <MEMO>{{ transaction.orderNumber }}{{ (transaction.originalAmount is not null) ? ' (' ~ transaction.originalAmount ~ ' ' ~ transaction.originalCurrency ~ ')' }}</MEMO>
                         </STMTTRN>
 {% endfor %}
