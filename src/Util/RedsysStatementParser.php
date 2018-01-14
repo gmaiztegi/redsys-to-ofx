@@ -27,6 +27,7 @@ class RedsysStatementParser
     const COLUMN_AMOUNT = 'Importe';
     const COLUMN_TYPE = 'Tipo operación';
     const COLUMN_CARD_NUMBER = 'Nº Tarjeta';
+    const COLUMN_PAYER_NAME = 'Titular';
 
     /**
      * @param \PHPExcel_Worksheet $sheet
@@ -78,6 +79,8 @@ class RedsysStatementParser
                 throw new InvalidStatementException(sprintf("Invalid amount for order %s.", $orderNumber));
             }
 
+            $payerName = $getColumn(self::COLUMN_PAYER_NAME, $currentRow);
+
             $type = $getColumn(self::COLUMN_TYPE, $currentRow);
             $amount = "Devolución" === $type ? -$amount : $amount;
             list($firstDigits, $lastDigits) = sscanf($getColumn(self::COLUMN_CARD_NUMBER, $currentRow), '%d******%4s');
@@ -97,6 +100,7 @@ class RedsysStatementParser
             $transaction->setAmount($amount);
             $transaction->setOriginalAmount($originalAmount);
             $transaction->setOriginalCurrency($originalCurrency);
+            $transaction->setPayerName($payerName);
             $transaction->setCardNumberLast($lastDigits);
             $transaction->setCode($code);
             $transaction->setOrderNumber($orderNumber);
@@ -130,6 +134,7 @@ class RedsysStatementParser
             self::COLUMN_AMOUNT => '',
             self::COLUMN_TYPE => '',
             self::COLUMN_CARD_NUMBER => '',
+            self::COLUMN_PAYER_NAME => '',
         );
 
         foreach (range('A', $sheet->getHighestColumn()) as $columnKey) {

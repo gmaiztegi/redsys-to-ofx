@@ -54,6 +54,11 @@ class Transaction
     protected $cardNumberLast;
 
     /**
+     * @var string
+     */
+    protected $payerName;
+
+    /**
      * @return string
      */
     public function getCode()
@@ -163,5 +168,21 @@ class Transaction
     public function setCardNumberLast($cardNumberLast)
     {
         $this->cardNumberLast = $cardNumberLast;
+    }
+
+    /**
+     * @return string
+     */
+    public function getPayerName()
+    {
+        return $this->payerName;
+    }
+
+    /**
+     * @param string $payerName
+     */
+    public function setPayerName($payerName)
+    {
+        $this->payerName = $payerName;
     }
 }
