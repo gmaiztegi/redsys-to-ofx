@@ -181,7 +181,8 @@ class RedsysStatementParserSpec extends ObjectBehavior
 
     function it_throws_exception_when_column_is_missing(\PHPExcel_Worksheet $sheet,
         ConsignmentFinder $consignmentFinder,
-        \PHPExcel_Cell $a1Cell) {
+        \PHPExcel_Cell $a1Cell
+    ) {
 
         $a1Cell->getValue()->willReturn('NotADate');
 
