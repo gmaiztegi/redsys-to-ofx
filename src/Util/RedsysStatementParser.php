@@ -57,7 +57,22 @@ class RedsysStatementParser
             $date = \DateTime::createFromFormat('d/m/Y H:i:s', $getColumn(self::COLUMN_DATETIME, $currentRow));
             $orderNumber = $getColumn(self::COLUMN_ORDER_NUMBER, $currentRow);
             list($success, $code) = sscanf($getColumn(self::COLUMN_RESULT, $currentRow), '%s %s');
-            $amount = sscanf($getColumn(self::COLUMN_AMOUNT, $currentRow), '%f EUR')[0];
+
+            $matches = array();
+            $amountStr = $getColumn(self::COLUMN_AMOUNT, $currentRow);
+
+            if (1 === preg_match("/^([0-9]+.[0-9]{2}) EUR(?: \([0-9]+.[0-9]{0,2} [A-Z]{3}\))?$/", $amountStr, $matches)) {
+                $amount = floatval($matches[1]);
+                $originalAmount = null;
+                $originalCurrency = null;
+            } elseif (1 === preg_match("/^([0-9]+.[0-9]{2}) ([A-Z]{3}) \(([0-9]+.?[0-9]{0,2})\)$/", $amountStr, $matches) && "EUR" !== $matches[2]) {
+                $amount = floatval($matches[3]);
+                $originalAmount = floatval($matches[1]);
+                $originalCurrency = $matches[2];
+            } else {
+                throw new InvalidStatementException(sprintf("Invalid amount for order %s.", $orderNumber));
+            }
+
             $type = $getColumn(self::COLUMN_TYPE, $currentRow);
             $amount = "Devolución" === $type ? -$amount : $amount;
             list($firstDigits, $lastDigits) = sscanf($getColumn(self::COLUMN_CARD_NUMBER, $currentRow), '%d******%4s');
@@ -81,6 +96,8 @@ class RedsysStatementParser
             $transaction = new Transaction();
             $transaction->setDate($date);
             $transaction->setAmount($amount);
+            $transaction->setOriginalAmount($originalAmount);
+            $transaction->setOriginalCurrency($originalCurrency);
             $transaction->setCardNumberLast($lastDigits);
             $transaction->setCode($code);
             $transaction->setOrderNumber($orderNumber);

@@ -39,6 +39,16 @@ class Transaction
     protected $amount;
 
     /**
+     * @var float
+     */
+    protected $originalAmount;
+
+    /**
+     * @var string
+     */
+    protected $originalCurrency;
+
+    /**
      * @var int
      */
     protected $cardNumberLast;
@@ -105,6 +115,38 @@ class Transaction
     public function setAmount($amount)
     {
         $this->amount = $amount;
+    }
+
+    /**
+     * @return float
+     */
+    public function getOriginalAmount()
+    {
+        return $this->originalAmount;
+    }
+
+    /**
+     * @param float $originalAmount
+     */
+    public function setOriginalAmount($originalAmount)
+    {
+        $this->originalAmount = $originalAmount;
+    }
+
+    /**
+     * @return string
+     */
+    public function getOriginalCurrency()
+    {
+        return $this->originalCurrency;
+    }
+
+    /**
+     * @param string $originalCurrency
+     */
+    public function setOriginalCurrency($originalCurrency)
+    {
+        $this->originalCurrency = $originalCurrency;
     }
 
     /**
