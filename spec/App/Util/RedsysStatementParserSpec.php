@@ -27,18 +27,21 @@ class RedsysStatementParserSpec extends ObjectBehavior
         \PHPExcel_Cell $f1Cell,
         \PHPExcel_Cell $g1Cell,
         \PHPExcel_Cell $h1Cell,
+        \PHPExcel_Cell $i1Cell,
         \PHPExcel_Cell $a2Cell,
         \PHPExcel_Cell $c2Cell,
         \PHPExcel_Cell $d2Cell,
         \PHPExcel_Cell $e2Cell,
         \PHPExcel_Cell $f2Cell,
         \PHPExcel_Cell $h2Cell,
+        \PHPExcel_Cell $i2Cell,
         \PHPExcel_Cell $a3Cell,
         \PHPExcel_Cell $c3Cell,
         \PHPExcel_Cell $d3Cell,
         \PHPExcel_Cell $e3Cell,
         \PHPExcel_Cell $f3Cell,
         \PHPExcel_Cell $h3Cell,
+        \PHPExcel_Cell $i3Cell,
         \PHPExcel_Cell $a4Cell
     ) {
         $a1Cell->getValue()->willReturn("Fecha");
@@ -49,6 +52,7 @@ class RedsysStatementParserSpec extends ObjectBehavior
         $f1Cell->getValue()->willReturn("Importe");
         $g1Cell->getValue()->willReturn("Cierre de sesión");
         $h1Cell->getValue()->willReturn("Nº Tarjeta");
+        $i1Cell->getValue()->willReturn("Titular");
 
         $sheet->getCell('A1')->willReturn($a1Cell);
         $sheet->getCell('B1')->willReturn($b1Cell);
@@ -58,7 +62,7 @@ class RedsysStatementParserSpec extends ObjectBehavior
         $sheet->getCell('F1')->willReturn($f1Cell);
         $sheet->getCell('G1')->willReturn($g1Cell);
         $sheet->getCell('H1')->willReturn($h1Cell);
-        $sheet->getHighestColumn()->willReturn('H');
+        $sheet->getCell('I1')->willReturn($i1Cell);
 
         $sheet->getCell('A2')->willReturn($a2Cell);
         $sheet->getCell('C2')->willReturn($c2Cell);
@@ -66,6 +70,7 @@ class RedsysStatementParserSpec extends ObjectBehavior
         $sheet->getCell('E2')->willReturn($e2Cell);
         $sheet->getCell('F2')->willReturn($f2Cell);
         $sheet->getCell('H2')->willReturn($h2Cell);
+        $sheet->getCell('I2')->willReturn($i2Cell);
 
         $sheet->getCell('A3')->willReturn($a3Cell);
         $sheet->getCell('C3')->willReturn($c3Cell);
@@ -73,7 +78,9 @@ class RedsysStatementParserSpec extends ObjectBehavior
         $sheet->getCell('E3')->willReturn($e3Cell);
         $sheet->getCell('F3')->willReturn($f3Cell);
         $sheet->getCell('H3')->willReturn($h3Cell);
+        $sheet->getCell('I3')->willReturn($i3Cell);
 
+        $sheet->getHighestColumn()->willReturn('I');
         $a4Cell->getValue()->willReturn("");
         $sheet->getCell("A4")->willReturn($a4Cell);
     }
@@ -91,13 +98,14 @@ class RedsysStatementParserSpec extends ObjectBehavior
         \PHPExcel_Cell $e2Cell,
         \PHPExcel_Cell $f2Cell,
         \PHPExcel_Cell $h2Cell,
+        \PHPExcel_Cell $i2Cell,
         \PHPExcel_Cell $a3Cell,
         \PHPExcel_Cell $c3Cell,
         \PHPExcel_Cell $d3Cell,
         \PHPExcel_Cell $e3Cell,
         \PHPExcel_Cell $f3Cell,
         \PHPExcel_Cell $h3Cell,
-        \PHPExcel_Cell $a4Cell
+        \PHPExcel_Cell $i3Cell
     ) {
         $consignment1 = "1";
         $dateString1 = "03/01/2017 11:10:13";
@@ -108,6 +116,7 @@ class RedsysStatementParserSpec extends ObjectBehavior
         $e2Cell->getValue()->willReturn("Autorizada 123456");
         $f2Cell->getValue()->willReturn("16.00 EUR");
         $h2Cell->getValue()->willReturn("4589******1234");
+        $i2Cell->getValue()->willReturn("Fulano");
         $consignmentFinder->findConsignment($date1, "1234", 16.00)->willReturn($consignment1);
 
         $consignment2 = "2";
@@ -119,10 +128,8 @@ class RedsysStatementParserSpec extends ObjectBehavior
         $e3Cell->getValue()->willReturn("Autorizada 987654");
         $f3Cell->getValue()->willReturn("29.69 EUR (27.48 GBP)");
         $h3Cell->getValue()->willReturn("4589******9876");
+        $i3Cell->getValue()->willReturn("Mengano");
         $consignmentFinder->findConsignment($date2, "9876", 29.69)->willReturn($consignment2);
-
-        $a4Cell->getValue()->willReturn("");
-        $sheet->getCell("A4")->willReturn($a4Cell);
 
         $result = $this->parse($sheet, $consignmentFinder);
 
@@ -134,6 +141,7 @@ class RedsysStatementParserSpec extends ObjectBehavior
         $result[$consignment1][0]->getOriginalAmount()->shouldBe(null);
         $result[$consignment1][0]->getOriginalCurrency()->shouldBe(null);
         $result[$consignment1][0]->getCardNumberLast()->shouldBe("1234");
+        $result[$consignment1][0]->getPayerName()->shouldBe("Fulano");
         $result[$consignment2][0]->getDate()->shouldBeLike($date2);
         $result[$consignment2][0]->getOrderNumber()->shouldBe("ES-22222");
         $result[$consignment2][0]->getCode()->shouldBe("987654");
@@ -141,6 +149,7 @@ class RedsysStatementParserSpec extends ObjectBehavior
         $result[$consignment2][0]->getOriginalAmount()->shouldBe(null);
         $result[$consignment2][0]->getOriginalCurrency()->shouldBe(null);
         $result[$consignment2][0]->getCardNumberLast()->shouldBe("9876");
+        $result[$consignment2][0]->getPayerName()->shouldBe("Mengano");
     }
 
     function it_parses_currencies_different_than_euros(\PHPExcel_Worksheet $sheet,
@@ -151,6 +160,7 @@ class RedsysStatementParserSpec extends ObjectBehavior
         \PHPExcel_Cell $e2Cell,
         \PHPExcel_Cell $f2Cell,
         \PHPExcel_Cell $h2Cell,
+        \PHPExcel_Cell $i2Cell,
         \PHPExcel_Cell $a3Cell
     ) {
         $consignment1 = "1";
@@ -162,6 +172,7 @@ class RedsysStatementParserSpec extends ObjectBehavior
         $e2Cell->getValue()->willReturn("Autorizada 123456");
         $f2Cell->getValue()->willReturn("42.00 GBP (47.81)");
         $h2Cell->getValue()->willReturn("4589******1234");
+        $i2Cell->getValue()->willReturn("Fulano");
         $consignmentFinder->findConsignment($date1, "1234", 47.81)->willReturn($consignment1);
 
         $a3Cell->getValue()->willReturn("");
@@ -177,6 +188,7 @@ class RedsysStatementParserSpec extends ObjectBehavior
         $result[$consignment1][0]->getOriginalAmount()->shouldBe(42.00);
         $result[$consignment1][0]->getOriginalCurrency()->shouldBe("GBP");
         $result[$consignment1][0]->getCardNumberLast()->shouldBe("1234");
+        $result[$consignment1][0]->getPayerName()->shouldBe("Fulano");
     }
 
     function it_throws_exception_when_column_is_missing(\PHPExcel_Worksheet $sheet,
