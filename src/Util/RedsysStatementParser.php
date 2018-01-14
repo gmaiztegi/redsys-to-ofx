@@ -113,7 +113,15 @@ class RedsysStatementParser
         return $transactions;
     }
 
-    private function parseHeader(\PHPExcel_Worksheet $sheet) {
+    /**
+     * @param \PHPExcel_Worksheet $sheet
+     *
+     * @return array
+     *
+     * @throws InvalidStatementException
+     */
+    private function parseHeader(\PHPExcel_Worksheet $sheet)
+    {
 
         $mapping = array(
             self::COLUMN_DATETIME => '',
