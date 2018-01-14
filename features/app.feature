@@ -32,6 +32,7 @@ Feature:
     Then the response status code should be 200
     And the response should contain "OFXHEADER:100"
     And the response should contain "<ACCTID>123456789</ACCTID>"
+    And the response should contain "<MEMO>FR-3706 (36.38 GBP)</MEMO>"
     And the response is loadable on python
 
   Scenario: It shows the missing column in the statement
