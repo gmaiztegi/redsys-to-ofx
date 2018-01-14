@@ -58,6 +58,11 @@ class RedsysStatementParser
             $orderNumber = $getColumn(self::COLUMN_ORDER_NUMBER, $currentRow);
             list($success, $code) = sscanf($getColumn(self::COLUMN_RESULT, $currentRow), '%s %s');
 
+            if ("Autorizada" !== $success) {
+                ++$currentRow;
+                continue;
+            }
+
             $matches = array();
             $amountStr = $getColumn(self::COLUMN_AMOUNT, $currentRow);
 
@@ -76,12 +81,6 @@ class RedsysStatementParser
             $type = $getColumn(self::COLUMN_TYPE, $currentRow);
             $amount = "Devolución" === $type ? -$amount : $amount;
             list($firstDigits, $lastDigits) = sscanf($getColumn(self::COLUMN_CARD_NUMBER, $currentRow), '%d******%4s');
-
-            if ("Autorizada" !== $success) {
-                ++$currentRow;
-                continue;
-            }
-
 
             if ("3" === strval($firstDigits)[0]) {
                 $consignment = 'AMEX'.$date->format('Ymd');
