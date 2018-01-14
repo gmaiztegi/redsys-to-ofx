@@ -40,7 +40,7 @@ class RedsysStatement
      * @var UploadedFile
      *
      * @Assert\NotBlank()
-     * @Assert\File(mimeTypes={ "text/csv", "text/plain" })
+     * @Assert\File(mimeTypes={ "text/csv", "text/plain", "application/octet-stream" })
      */
     protected $transactionStatement;
 
