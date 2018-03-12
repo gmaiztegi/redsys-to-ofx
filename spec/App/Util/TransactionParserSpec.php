@@ -17,12 +17,16 @@ use App\Util\RedsysStatementParser;
 use App\Util\SabadellConsignmentParser;
 use App\Util\TransactionFlattener;
 use App\Util\TransactionParser;
+use PhpOffice\PhpSpreadsheet\Reader\Csv as CsvReader;
+use PhpOffice\PhpSpreadsheet\Reader\Xls as XlsReader;
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 use PhpSpec\ObjectBehavior;
 use Symfony\Component\HttpFoundation\File\File;
 
 class TransactionParserSpec extends ObjectBehavior
 {
-    function let(RedsysStatementParser $redsysStatementParser, SabadellConsignmentParser $consignmentParser, TransactionFlattener $transactionFlattener, FinderKeyCreator $finderKeyCreator, \PHPExcel_Reader_Excel5 $excelReader, \PHPExcel_Reader_CSV $csvReader)
+    function let(RedsysStatementParser $redsysStatementParser, SabadellConsignmentParser $consignmentParser, TransactionFlattener $transactionFlattener, FinderKeyCreator $finderKeyCreator, XlsReader $excelReader, CsvReader $csvReader)
     {
         $this->beConstructedWith($redsysStatementParser, $consignmentParser, $transactionFlattener, $finderKeyCreator, $excelReader, $csvReader);
     }
@@ -32,7 +36,7 @@ class TransactionParserSpec extends ObjectBehavior
         $this->shouldHaveType(TransactionParser::class);
     }
 
-    function it_parses_the_files(RedsysStatementParser $redsysStatementParser, SabadellConsignmentParser $consignmentParser, TransactionFlattener $transactionFlattener, FinderKeyCreator $finderKeyCreator, \PHPExcel_Reader_Excel5 $excelReader, \PHPExcel_Reader_CSV $csvReader, File $consignmentFile, File $transactionFile, \PHPExcel $consignmentExcel, \PHPExcel_Worksheet $consignmentSheet, \PHPExcel $transactionExcel, \PHPExcel_Worksheet $transactionSheet)
+    function it_parses_the_files(RedsysStatementParser $redsysStatementParser, SabadellConsignmentParser $consignmentParser, TransactionFlattener $transactionFlattener, FinderKeyCreator $finderKeyCreator, XlsReader $excelReader, CsvReader $csvReader, File $consignmentFile, File $transactionFile, Spreadsheet $consignmentExcel, Worksheet $consignmentSheet, Spreadsheet $transactionExcel, Worksheet $transactionSheet)
     {
         $consignmentFilename = 'somefilename.xls';
         $consignmentFile->getPathname()->willReturn($consignmentFilename);

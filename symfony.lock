@@ -95,9 +95,6 @@
     "symfony/dotenv": {
         "version": "v3.3.10"
     },
-    "phpoffice/phpexcel": {
-        "version": "1.8.1"
-    },
     "twig/twig": {
         "version": "v2.4.4"
     },
@@ -271,5 +268,8 @@
     },
     "behat/mink-browserkit-driver": {
         "version": "v1.3.2"
+    },
+    "phpoffice/phpspreadsheet": {
+        "version": "1.2.0"
     }
 }

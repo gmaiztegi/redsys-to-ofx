@@ -35,13 +35,13 @@ services:
         public: true
 
     PHPExcel_Reader_Excel5:
-        class: PHPExcel_Reader_Excel5
+        class: PhpOffice\PhpSpreadsheet\Reader\Xls
         shared: false
-        factory: ['PHPExcel_IOFactory', createReader]
-        arguments: ['Excel5']
+        factory: ['PhpOffice\PhpSpreadsheet\IOFactory', createReader]
+        arguments: ['Xls']
 
     PHPExcel_Reader_CSV:
-        class: PHPExcel_Reader_CSV
+        class: PhpOffice\PhpSpreadsheet\Reader\Csv
         shared: false
-        factory: ['PHPExcel_IOFactory', createReader]
-        arguments: ['CSV']
+        factory: ['PhpOffice\PhpSpreadsheet\IOFactory', createReader]
+        arguments: ['Csv']

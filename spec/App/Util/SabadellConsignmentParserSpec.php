@@ -13,6 +13,8 @@ namespace spec\App\Util;
 
 use App\Util\FinderKeyCreator;
 use App\Util\SabadellConsignmentParser;
+use PhpOffice\PhpSpreadsheet\Cell\Cell;
+use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 use PhpSpec\ObjectBehavior;
 
 
@@ -29,25 +31,25 @@ class SabadellConsignmentParserSpec extends ObjectBehavior
     }
 
     function it_parses_the_sheet(FinderKeyCreator $finderKeyCreator,
-        \PHPExcel_Worksheet $sheet,
-        \PHPExcel_Cell $a1Cell,
-        \PHPExcel_Cell $a6Cell,
-        \PHPExcel_Cell $b6Cell,
-        \PHPExcel_Cell $c6Cell,
-        \PHPExcel_Cell $d6Cell,
-        \PHPExcel_Cell $h6Cell,
-        \PHPExcel_Cell $a7Cell,
-        \PHPExcel_Cell $b7Cell,
-        \PHPExcel_Cell $c7Cell,
-        \PHPExcel_Cell $d7Cell,
-        \PHPExcel_Cell $h7Cell,
-        \PHPExcel_Cell $a8Cell,
-        \PHPExcel_Cell $a14Cell,
-        \PHPExcel_Cell $b14Cell,
-        \PHPExcel_Cell $c14Cell,
-        \PHPExcel_Cell $d14Cell,
-        \PHPExcel_Cell $h14Cell,
-        \PHPExcel_Cell $a15Cell
+        Worksheet $sheet,
+        Cell $a1Cell,
+        Cell $a6Cell,
+        Cell $b6Cell,
+        Cell $c6Cell,
+        Cell $d6Cell,
+        Cell $h6Cell,
+        Cell $a7Cell,
+        Cell $b7Cell,
+        Cell $c7Cell,
+        Cell $d7Cell,
+        Cell $h7Cell,
+        Cell $a8Cell,
+        Cell $a14Cell,
+        Cell $b14Cell,
+        Cell $c14Cell,
+        Cell $d14Cell,
+        Cell $h14Cell,
+        Cell $a15Cell
     ) {
         $consignment1 = "1";
         $consignment2 = "2";

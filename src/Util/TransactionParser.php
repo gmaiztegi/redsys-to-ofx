@@ -12,6 +12,8 @@
 namespace App\Util;
 
 use App\Entity\Transaction;
+use PhpOffice\PhpSpreadsheet\Reader\Csv as CsvReader;
+use PhpOffice\PhpSpreadsheet\Reader\Xls as XlsReader;
 use Symfony\Component\HttpFoundation\File\File;
 
 /**
@@ -42,12 +44,12 @@ class TransactionParser
     protected $finderKeyCreator;
 
     /**
-     * @var \PHPExcel_Reader_Excel5
+     * @var XlsReader
      */
     protected $excelReader;
 
     /**
-     * @var \PHPExcel_Reader_Excel5
+     * @var CsvReader
      */
     protected $csvReader;
 
@@ -57,10 +59,10 @@ class TransactionParser
      * @param SabadellConsignmentParser $consignmentParser
      * @param TransactionFlattener      $transactionFlattener
      * @param FinderKeyCreator          $finderKeyCreator
-     * @param \PHPExcel_Reader_Excel5   $excelReader
-     * @param \PHPExcel_Reader_CSV      $csvReader
+     * @param XlsReader                 $excelReader
+     * @param CsvReader                 $csvReader
      */
-    public function __construct(RedsysStatementParser $redsysStatementParser, SabadellConsignmentParser $consignmentParser, TransactionFlattener $transactionFlattener, FinderKeyCreator $finderKeyCreator, \PHPExcel_Reader_Excel5 $excelReader, \PHPExcel_Reader_CSV $csvReader)
+    public function __construct(RedsysStatementParser $redsysStatementParser, SabadellConsignmentParser $consignmentParser, TransactionFlattener $transactionFlattener, FinderKeyCreator $finderKeyCreator, XlsReader $excelReader, CsvReader $csvReader)
     {
         $this->redsysStatementParser = $redsysStatementParser;
         $this->consignmentParser = $consignmentParser;

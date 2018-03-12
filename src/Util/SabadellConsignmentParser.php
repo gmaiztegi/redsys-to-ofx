@@ -12,6 +12,7 @@
 namespace App\Util;
 
 use App\Exception\InvalidStatementException;
+use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 
 /**
  * Class ConsignmentParser
@@ -35,13 +36,13 @@ class SabadellConsignmentParser
     }
 
     /**
-     * @param \PHPExcel_Worksheet $sheet
+     * @param Worksheet $sheet
      *
      * @return array
      *
      * @throws InvalidStatementException
      */
-    public function parseConsignmentFile(\PHPExcel_Worksheet $sheet)
+    public function parseConsignmentFile(Worksheet $sheet)
     {
         if (0 !== strpos($sheet->getCell('A1')->getValue(), "CONSULTA DE OPERACIONES LIQUIDADAS A COMERCIOS")) {
             throw new InvalidStatementException("The spreadsheet doesn't seem to be a valid consignment report.");

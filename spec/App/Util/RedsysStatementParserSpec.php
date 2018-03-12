@@ -14,35 +14,37 @@ namespace spec\App\Util;
 use App\Exception\InvalidStatementException;
 use App\Util\ConsignmentFinder;
 use App\Util\RedsysStatementParser;
+use PhpOffice\PhpSpreadsheet\Cell\Cell;
+use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 use PhpSpec\ObjectBehavior;
 
 class RedsysStatementParserSpec extends ObjectBehavior
 {
-    function let(\PHPExcel_Worksheet $sheet,
-        \PHPExcel_Cell $a1Cell,
-        \PHPExcel_Cell $b1Cell,
-        \PHPExcel_Cell $c1Cell,
-        \PHPExcel_Cell $d1Cell,
-        \PHPExcel_Cell $e1Cell,
-        \PHPExcel_Cell $f1Cell,
-        \PHPExcel_Cell $g1Cell,
-        \PHPExcel_Cell $h1Cell,
-        \PHPExcel_Cell $i1Cell,
-        \PHPExcel_Cell $a2Cell,
-        \PHPExcel_Cell $c2Cell,
-        \PHPExcel_Cell $d2Cell,
-        \PHPExcel_Cell $e2Cell,
-        \PHPExcel_Cell $f2Cell,
-        \PHPExcel_Cell $h2Cell,
-        \PHPExcel_Cell $i2Cell,
-        \PHPExcel_Cell $a3Cell,
-        \PHPExcel_Cell $c3Cell,
-        \PHPExcel_Cell $d3Cell,
-        \PHPExcel_Cell $e3Cell,
-        \PHPExcel_Cell $f3Cell,
-        \PHPExcel_Cell $h3Cell,
-        \PHPExcel_Cell $i3Cell,
-        \PHPExcel_Cell $a4Cell
+    function let(Worksheet $sheet,
+        Cell $a1Cell,
+        Cell $b1Cell,
+        Cell $c1Cell,
+        Cell $d1Cell,
+        Cell $e1Cell,
+        Cell $f1Cell,
+        Cell $g1Cell,
+        Cell $h1Cell,
+        Cell $i1Cell,
+        Cell $a2Cell,
+        Cell $c2Cell,
+        Cell $d2Cell,
+        Cell $e2Cell,
+        Cell $f2Cell,
+        Cell $h2Cell,
+        Cell $i2Cell,
+        Cell $a3Cell,
+        Cell $c3Cell,
+        Cell $d3Cell,
+        Cell $e3Cell,
+        Cell $f3Cell,
+        Cell $h3Cell,
+        Cell $i3Cell,
+        Cell $a4Cell
     ) {
         $a1Cell->getValue()->willReturn("Fecha");
         $b1Cell->getValue()->willReturn("Nº de terminal");
@@ -90,22 +92,22 @@ class RedsysStatementParserSpec extends ObjectBehavior
         $this->shouldHaveType(RedsysStatementParser::class);
     }
 
-    function it_parses_the_file(\PHPExcel_Worksheet $sheet,
+    function it_parses_the_file(Worksheet $sheet,
         ConsignmentFinder $consignmentFinder,
-        \PHPExcel_Cell $a2Cell,
-        \PHPExcel_Cell $c2Cell,
-        \PHPExcel_Cell $d2Cell,
-        \PHPExcel_Cell $e2Cell,
-        \PHPExcel_Cell $f2Cell,
-        \PHPExcel_Cell $h2Cell,
-        \PHPExcel_Cell $i2Cell,
-        \PHPExcel_Cell $a3Cell,
-        \PHPExcel_Cell $c3Cell,
-        \PHPExcel_Cell $d3Cell,
-        \PHPExcel_Cell $e3Cell,
-        \PHPExcel_Cell $f3Cell,
-        \PHPExcel_Cell $h3Cell,
-        \PHPExcel_Cell $i3Cell
+        Cell $a2Cell,
+        Cell $c2Cell,
+        Cell $d2Cell,
+        Cell $e2Cell,
+        Cell $f2Cell,
+        Cell $h2Cell,
+        Cell $i2Cell,
+        Cell $a3Cell,
+        Cell $c3Cell,
+        Cell $d3Cell,
+        Cell $e3Cell,
+        Cell $f3Cell,
+        Cell $h3Cell,
+        Cell $i3Cell
     ) {
         $consignment1 = "1";
         $dateString1 = "03/01/2017 11:10:13";
@@ -152,16 +154,16 @@ class RedsysStatementParserSpec extends ObjectBehavior
         $result[$consignment2][0]->getPayerName()->shouldBe("Mengano");
     }
 
-    function it_parses_currencies_different_than_euros(\PHPExcel_Worksheet $sheet,
+    function it_parses_currencies_different_than_euros(Worksheet $sheet,
         ConsignmentFinder $consignmentFinder,
-        \PHPExcel_Cell $a2Cell,
-        \PHPExcel_Cell $c2Cell,
-        \PHPExcel_Cell $d2Cell,
-        \PHPExcel_Cell $e2Cell,
-        \PHPExcel_Cell $f2Cell,
-        \PHPExcel_Cell $h2Cell,
-        \PHPExcel_Cell $i2Cell,
-        \PHPExcel_Cell $a3Cell
+        Cell $a2Cell,
+        Cell $c2Cell,
+        Cell $d2Cell,
+        Cell $e2Cell,
+        Cell $f2Cell,
+        Cell $h2Cell,
+        Cell $i2Cell,
+        Cell $a3Cell
     ) {
         $consignment1 = "1";
         $dateString1 = "03/01/2017 11:10:13";
@@ -191,9 +193,9 @@ class RedsysStatementParserSpec extends ObjectBehavior
         $result[$consignment1][0]->getPayerName()->shouldBe("Fulano");
     }
 
-    function it_throws_exception_when_column_is_missing(\PHPExcel_Worksheet $sheet,
+    function it_throws_exception_when_column_is_missing(Worksheet $sheet,
         ConsignmentFinder $consignmentFinder,
-        \PHPExcel_Cell $a1Cell
+        Cell $a1Cell
     ) {
 
         $a1Cell->getValue()->willReturn('NotADate');

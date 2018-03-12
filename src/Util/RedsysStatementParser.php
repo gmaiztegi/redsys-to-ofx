@@ -13,6 +13,7 @@ namespace App\Util;
 
 use App\Entity\Transaction;
 use App\Exception\InvalidStatementException;
+use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 
 /**
  * Class RedsysStatementParser
@@ -30,14 +31,14 @@ class RedsysStatementParser
     const COLUMN_PAYER_NAME = 'Titular';
 
     /**
-     * @param \PHPExcel_Worksheet $sheet
-     * @param ConsignmentFinder   $consignmentFinder
+     * @param Worksheet         $sheet
+     * @param ConsignmentFinder $consignmentFinder
      *
      * @return Transaction[][]
      *
      * @throws InvalidStatementException If data is not acceptable in some way.
      */
-    public function parse(\PHPExcel_Worksheet $sheet, ConsignmentFinder $consignmentFinder)
+    public function parse(Worksheet $sheet, ConsignmentFinder $consignmentFinder)
     {
         $transactions = array();
         $currentRow = 2;
@@ -118,13 +119,13 @@ class RedsysStatementParser
     }
 
     /**
-     * @param \PHPExcel_Worksheet $sheet
+     * @param Worksheet $sheet
      *
      * @return array
      *
      * @throws InvalidStatementException
      */
-    private function parseHeader(\PHPExcel_Worksheet $sheet)
+    private function parseHeader(Worksheet $sheet)
     {
 
         $mapping = array(
