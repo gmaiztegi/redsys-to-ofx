@@ -26,6 +26,8 @@ class RedsysStatementParser
     const COLUMN_ORDER_NUMBER = 'Número de pedido';
     const COLUMN_RESULT = 'Resultado operación y código';
     const COLUMN_AMOUNT = 'Importe';
+    const COLUMN_CURRENCY = 'Moneda';
+    const COLUMN_AMOUNT_EUROS = 'Importe Euros';
     const COLUMN_TYPE = 'Tipo operación';
     const COLUMN_CARD_NUMBER = 'Nº Tarjeta';
     const COLUMN_PAYER_NAME = 'Titular';
@@ -65,20 +67,9 @@ class RedsysStatementParser
                 continue;
             }
 
-            $matches = array();
-            $amountStr = $getColumn(self::COLUMN_AMOUNT, $currentRow);
-
-            if (1 === preg_match("/^([0-9]+.[0-9]{2}) EUR(?: \([0-9]+.[0-9]{0,2} [A-Z]{3}\))?$/", $amountStr, $matches)) {
-                $amount = floatval($matches[1]);
-                $originalAmount = null;
-                $originalCurrency = null;
-            } elseif (1 === preg_match("/^([0-9]+.[0-9]{2}) ([A-Z]{3}) \(([0-9]+.?[0-9]{0,2})\)$/", $amountStr, $matches) && "EUR" !== $matches[2]) {
-                $amount = floatval($matches[3]);
-                $originalAmount = floatval($matches[1]);
-                $originalCurrency = $matches[2];
-            } else {
-                throw new InvalidStatementException(sprintf("Invalid amount for order %s.", $orderNumber));
-            }
+            $amount = floatval($getColumn(self::COLUMN_AMOUNT_EUROS, $currentRow));
+            $originalAmount = floatval($getColumn(self::COLUMN_AMOUNT, $currentRow));
+            $originalCurrency = $getColumn(self::COLUMN_CURRENCY, $currentRow);
 
             $payerName = $getColumn(self::COLUMN_PAYER_NAME, $currentRow);
 
@@ -133,6 +124,8 @@ class RedsysStatementParser
             self::COLUMN_ORDER_NUMBER => '',
             self::COLUMN_RESULT => '',
             self::COLUMN_AMOUNT => '',
+            self::COLUMN_CURRENCY => '',
+            self::COLUMN_AMOUNT_EUROS => '',
             self::COLUMN_TYPE => '',
             self::COLUMN_CARD_NUMBER => '',
             self::COLUMN_PAYER_NAME => '',

@@ -30,20 +30,26 @@ class RedsysStatementParserSpec extends ObjectBehavior
         Cell $g1Cell,
         Cell $h1Cell,
         Cell $i1Cell,
+        Cell $j1Cell,
+        Cell $k1Cell,
         Cell $a2Cell,
         Cell $c2Cell,
         Cell $d2Cell,
         Cell $e2Cell,
         Cell $f2Cell,
+        Cell $g2Cell,
         Cell $h2Cell,
-        Cell $i2Cell,
+        Cell $j2Cell,
+        Cell $k2Cell,
         Cell $a3Cell,
         Cell $c3Cell,
         Cell $d3Cell,
         Cell $e3Cell,
         Cell $f3Cell,
+        Cell $g3Cell,
         Cell $h3Cell,
-        Cell $i3Cell,
+        Cell $j3Cell,
+        Cell $k3Cell,
         Cell $a4Cell
     ) {
         $a1Cell->getValue()->willReturn("Fecha");
@@ -52,9 +58,11 @@ class RedsysStatementParserSpec extends ObjectBehavior
         $d1Cell->getValue()->willReturn("Número de pedido");
         $e1Cell->getValue()->willReturn("Resultado operación y código");
         $f1Cell->getValue()->willReturn("Importe");
-        $g1Cell->getValue()->willReturn("Cierre de sesión");
-        $h1Cell->getValue()->willReturn("Nº Tarjeta");
-        $i1Cell->getValue()->willReturn("Titular");
+        $g1Cell->getValue()->willReturn("Moneda");
+        $h1Cell->getValue()->willReturn("Importe Euros");
+        $i1Cell->getValue()->willReturn("Cierre de sesión");
+        $j1Cell->getValue()->willReturn("Nº Tarjeta");
+        $k1Cell->getValue()->willReturn("Titular");
 
         $sheet->getCell('A1')->willReturn($a1Cell);
         $sheet->getCell('B1')->willReturn($b1Cell);
@@ -65,24 +73,30 @@ class RedsysStatementParserSpec extends ObjectBehavior
         $sheet->getCell('G1')->willReturn($g1Cell);
         $sheet->getCell('H1')->willReturn($h1Cell);
         $sheet->getCell('I1')->willReturn($i1Cell);
+        $sheet->getCell('J1')->willReturn($j1Cell);
+        $sheet->getCell('K1')->willReturn($k1Cell);
 
         $sheet->getCell('A2')->willReturn($a2Cell);
         $sheet->getCell('C2')->willReturn($c2Cell);
         $sheet->getCell('D2')->willReturn($d2Cell);
         $sheet->getCell('E2')->willReturn($e2Cell);
         $sheet->getCell('F2')->willReturn($f2Cell);
+        $sheet->getCell('G2')->willReturn($g2Cell);
         $sheet->getCell('H2')->willReturn($h2Cell);
-        $sheet->getCell('I2')->willReturn($i2Cell);
+        $sheet->getCell('J2')->willReturn($j2Cell);
+        $sheet->getCell('K2')->willReturn($k2Cell);
 
         $sheet->getCell('A3')->willReturn($a3Cell);
         $sheet->getCell('C3')->willReturn($c3Cell);
         $sheet->getCell('D3')->willReturn($d3Cell);
         $sheet->getCell('E3')->willReturn($e3Cell);
         $sheet->getCell('F3')->willReturn($f3Cell);
+        $sheet->getCell('G3')->willReturn($g3Cell);
         $sheet->getCell('H3')->willReturn($h3Cell);
-        $sheet->getCell('I3')->willReturn($i3Cell);
+        $sheet->getCell('J3')->willReturn($j3Cell);
+        $sheet->getCell('K3')->willReturn($k3Cell);
 
-        $sheet->getHighestColumn()->willReturn('I');
+        $sheet->getHighestColumn()->willReturn('K');
         $a4Cell->getValue()->willReturn("");
         $sheet->getCell("A4")->willReturn($a4Cell);
     }
@@ -99,15 +113,19 @@ class RedsysStatementParserSpec extends ObjectBehavior
         Cell $d2Cell,
         Cell $e2Cell,
         Cell $f2Cell,
+        Cell $g2Cell,
         Cell $h2Cell,
-        Cell $i2Cell,
+        Cell $j2Cell,
+        Cell $k2Cell,
         Cell $a3Cell,
         Cell $c3Cell,
         Cell $d3Cell,
         Cell $e3Cell,
         Cell $f3Cell,
+        Cell $g3Cell,
         Cell $h3Cell,
-        Cell $i3Cell
+        Cell $j3Cell,
+        Cell $k3Cell
     ) {
         $consignment1 = "1";
         $dateString1 = "03/01/2017 11:10:13";
@@ -116,9 +134,11 @@ class RedsysStatementParserSpec extends ObjectBehavior
         $c2Cell->getValue()->willReturn("Autorización");
         $d2Cell->getValue()->willReturn("ES-11111");
         $e2Cell->getValue()->willReturn("Autorizada 123456");
-        $f2Cell->getValue()->willReturn("16.00 EUR");
-        $h2Cell->getValue()->willReturn("4589******1234");
-        $i2Cell->getValue()->willReturn("Fulano");
+        $f2Cell->getValue()->willReturn("16.00");
+        $g2Cell->getValue()->willReturn("EUR");
+        $h2Cell->getValue()->willReturn("16.00");
+        $j2Cell->getValue()->willReturn("4589******1234");
+        $k2Cell->getValue()->willReturn("Fulano");
         $consignmentFinder->findConsignment($date1, "1234", 16.00)->willReturn($consignment1);
 
         $consignment2 = "2";
@@ -128,9 +148,11 @@ class RedsysStatementParserSpec extends ObjectBehavior
         $c3Cell->getValue()->willReturn("Autorización");
         $d3Cell->getValue()->willReturn("ES-22222");
         $e3Cell->getValue()->willReturn("Autorizada 987654");
-        $f3Cell->getValue()->willReturn("29.69 EUR (27.48 GBP)");
-        $h3Cell->getValue()->willReturn("4589******9876");
-        $i3Cell->getValue()->willReturn("Mengano");
+        $f3Cell->getValue()->willReturn("29.69");
+        $g3Cell->getValue()->willReturn("EUR");
+        $h3Cell->getValue()->willReturn("29.69");
+        $j3Cell->getValue()->willReturn("4589******9876");
+        $k3Cell->getValue()->willReturn("Mengano");
         $consignmentFinder->findConsignment($date2, "9876", 29.69)->willReturn($consignment2);
 
         $result = $this->parse($sheet, $consignmentFinder);
@@ -140,16 +162,16 @@ class RedsysStatementParserSpec extends ObjectBehavior
         $result[$consignment1][0]->getOrderNumber()->shouldBe("ES-11111");
         $result[$consignment1][0]->getCode()->shouldBe("123456");
         $result[$consignment1][0]->getAmount()->shouldBe(16.00);
-        $result[$consignment1][0]->getOriginalAmount()->shouldBe(null);
-        $result[$consignment1][0]->getOriginalCurrency()->shouldBe(null);
+        $result[$consignment1][0]->getOriginalAmount()->shouldBe(16.00);
+        $result[$consignment1][0]->getOriginalCurrency()->shouldBe("EUR");
         $result[$consignment1][0]->getCardNumberLast()->shouldBe("1234");
         $result[$consignment1][0]->getPayerName()->shouldBe("Fulano");
         $result[$consignment2][0]->getDate()->shouldBeLike($date2);
         $result[$consignment2][0]->getOrderNumber()->shouldBe("ES-22222");
         $result[$consignment2][0]->getCode()->shouldBe("987654");
         $result[$consignment2][0]->getAmount()->shouldBe(29.69);
-        $result[$consignment2][0]->getOriginalAmount()->shouldBe(null);
-        $result[$consignment2][0]->getOriginalCurrency()->shouldBe(null);
+        $result[$consignment2][0]->getOriginalAmount()->shouldBe(29.69);
+        $result[$consignment2][0]->getOriginalCurrency()->shouldBe("EUR");
         $result[$consignment2][0]->getCardNumberLast()->shouldBe("9876");
         $result[$consignment2][0]->getPayerName()->shouldBe("Mengano");
     }
@@ -161,8 +183,10 @@ class RedsysStatementParserSpec extends ObjectBehavior
         Cell $d2Cell,
         Cell $e2Cell,
         Cell $f2Cell,
+        Cell $g2Cell,
         Cell $h2Cell,
-        Cell $i2Cell,
+        Cell $j2Cell,
+        Cell $k2Cell,
         Cell $a3Cell
     ) {
         $consignment1 = "1";
@@ -172,9 +196,11 @@ class RedsysStatementParserSpec extends ObjectBehavior
         $c2Cell->getValue()->willReturn("Autorización");
         $d2Cell->getValue()->willReturn("ES-11111");
         $e2Cell->getValue()->willReturn("Autorizada 123456");
-        $f2Cell->getValue()->willReturn("42.00 GBP (47.81)");
-        $h2Cell->getValue()->willReturn("4589******1234");
-        $i2Cell->getValue()->willReturn("Fulano");
+        $f2Cell->getValue()->willReturn("42.00");
+        $g2Cell->getValue()->willReturn("GBP");
+        $h2Cell->getValue()->willReturn("47.81");
+        $j2Cell->getValue()->willReturn("4589******1234");
+        $k2Cell->getValue()->willReturn("Fulano");
         $consignmentFinder->findConsignment($date1, "1234", 47.81)->willReturn($consignment1);
 
         $a3Cell->getValue()->willReturn("");
