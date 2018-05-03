@@ -75,6 +75,7 @@ class RedsysStatementParser
 
             $type = $getColumn(self::COLUMN_TYPE, $currentRow);
             $amount = "Devolución" === $type ? -$amount : $amount;
+            $originalAmount = "Devolución" === $type ? -$originalAmount : $originalAmount;
             list($firstDigits, $lastDigits) = sscanf($getColumn(self::COLUMN_CARD_NUMBER, $currentRow), '%d******%4s');
 
             if ("3" === strval($firstDigits)[0]) {
