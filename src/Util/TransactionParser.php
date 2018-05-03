@@ -80,6 +80,7 @@ class TransactionParser
      */
     public function parseTransactionList(File $consignmentFile, File $transactionFile)
     {
+        $this->excelReader->setReadDataOnly(true);
         $consignmentSheet = $this->excelReader->load($consignmentFile->getPathname())->getActiveSheet();
         $consignmentData = $this->consignmentParser->parseConsignmentFile($consignmentSheet);
 
@@ -87,6 +88,7 @@ class TransactionParser
 
         $this->csvReader->setInputEncoding('ISO-8859-1');
         $this->csvReader->setDelimiter(';');
+        $this->csvReader->setReadDataOnly(true);
         $transactionSheet = $this->csvReader->load($transactionFile->getPathname())->getActiveSheet();
         $transactionData = $this->redsysStatementParser->parse($transactionSheet, $consignmentFinder);
 
