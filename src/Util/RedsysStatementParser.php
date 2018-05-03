@@ -22,7 +22,7 @@ use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
  */
 class RedsysStatementParser
 {
-    const COLUMN_DATETIME = 'Fecha';
+    const COLUMN_DATE = 'Fecha';
     const COLUMN_ORDER_NUMBER = 'Número de pedido';
     const COLUMN_RESULT = 'Resultado operación y código';
     const COLUMN_AMOUNT = 'Importe';
@@ -57,8 +57,8 @@ class RedsysStatementParser
             return $sheet->getCell($columnMapping[$column].$row)->getValue();
         };
 
-        while (!empty($getColumn(self::COLUMN_DATETIME, $currentRow))) {
-            $date = \DateTime::createFromFormat('d/m/Y H:i:s', $getColumn(self::COLUMN_DATETIME, $currentRow));
+        while (!empty($getColumn(self::COLUMN_DATE, $currentRow))) {
+            $date = \DateTime::createFromFormat('d/m/Y', $getColumn(self::COLUMN_DATE, $currentRow));
             $orderNumber = $getColumn(self::COLUMN_ORDER_NUMBER, $currentRow);
             list($success, $code) = sscanf($getColumn(self::COLUMN_RESULT, $currentRow), '%s %s');
 
@@ -120,7 +120,7 @@ class RedsysStatementParser
     {
 
         $mapping = array(
-            self::COLUMN_DATETIME => '',
+            self::COLUMN_DATE => '',
             self::COLUMN_ORDER_NUMBER => '',
             self::COLUMN_RESULT => '',
             self::COLUMN_AMOUNT => '',
