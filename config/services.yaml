@@ -34,13 +34,19 @@ services:
     App\Util\OfxBuilder:
         public: true
 
-    PHPExcel_Reader_Excel5:
+    #App\Util\CsvReader:
+    #    parent: PhpOffice\PhpSpreadsheet\Reader\Csv
+    #    autowire: true
+    #    autoconfigure: false
+    #    public: false
+
+    PhpOffice\PhpSpreadsheet\Reader\Xls:
         class: PhpOffice\PhpSpreadsheet\Reader\Xls
         shared: false
         factory: ['PhpOffice\PhpSpreadsheet\IOFactory', createReader]
         arguments: ['Xls']
 
-    PHPExcel_Reader_CSV:
+    PhpOffice\PhpSpreadsheet\Reader\Csv:
         class: PhpOffice\PhpSpreadsheet\Reader\Csv
         shared: false
         factory: ['PhpOffice\PhpSpreadsheet\IOFactory', createReader]
