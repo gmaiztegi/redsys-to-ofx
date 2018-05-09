@@ -40,6 +40,7 @@ class TransactionParserSpec extends ObjectBehavior
     {
         $consignmentFilename = 'somefilename.xls';
         $consignmentFile->getPathname()->willReturn($consignmentFilename);
+        $excelReader->setReadDataOnly(true)->shouldBeCalled();
         $excelReader->load($consignmentFilename)->willReturn($consignmentExcel);
         $consignmentExcel->getActiveSheet()->willReturn($consignmentSheet);
         $consignmentData = array('consignmentdata');
@@ -47,6 +48,7 @@ class TransactionParserSpec extends ObjectBehavior
 
         $csvReader->setInputEncoding('ISO-8859-1')->shouldBeCalled();
         $csvReader->setDelimiter(';')->shouldBeCalled();
+        $csvReader->setReadDataOnly(true)->shouldBeCalled();
         $transactionFilename = 'anotherfilename.csv';
         $transactionFile->getPathname()->willReturn($transactionFilename);
         $csvReader->load($transactionFilename)->shouldBeCalled()->willReturn($transactionExcel);
