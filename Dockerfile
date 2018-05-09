@@ -1,24 +1,16 @@
-FROM gmaiztegi/nginx-php-fpm:latest
+FROM gmaiztegi/nginx-php-fpm
 MAINTAINER Gorka Maiztegi <gorkamaiztegi@gik.blue>
 
-#ARG AS_UID=33
+RUN sed -i "s,root /var/www/app/\\;,root /var/www/app/public\\;," /etc/nginx/nginx.conf
 
-ENV BASE_DIR /var/www/app
-ENV APP_ENV ${APP_ENV:-dev}
-ENV APP_DEBUG ${APP_DEBUG:-1}
+ARG APP_ENV=dev
+ARG APP_DEBUG=1
 
-#Modify UID of www-data into UID of local user
-#RUN usermod -u ${AS_UID} www-data
+ENV APP_ENV ${APP_ENV}
+ENV APP_DEBUG ${APP_DEBUG}
 
-# Operate as www-data in SYLIUS_DIR per default
-WORKDIR ${BASE_DIR}
+COPY --chown=nginx:nginx . /var/www/app
 
-# nginx configuration
-COPY docker/nginx.conf /etc/nginx/nginx.conf
-COPY . ${BASE_DIR}
-
-RUN chmod +x bin/console \
-    && bin/console cache:warmup \
-    && chown -R nginx:nginx .
+RUN bin/console cache:clear
 
 EXPOSE 80
