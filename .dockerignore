@@ -2,3 +2,6 @@
 .web-server-pid
 node_modules
 var
+vendor
+public/bundles/*
+public/build/*
