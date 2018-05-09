@@ -128,8 +128,8 @@ class RedsysStatementParserSpec extends ObjectBehavior
         Cell $k3Cell
     ) {
         $consignment1 = "1";
-        $dateString1 = "03/01/2017 11:10:13";
-        $date1 = \DateTime::createFromFormat('d/m/Y H:i:s', $dateString1);
+        $dateString1 = "03/01/2017";
+        $date1 = \DateTime::createFromFormat('d/m/Y', $dateString1);
         $a2Cell->getValue()->willReturn($dateString1);
         $c2Cell->getValue()->willReturn("Autorización");
         $d2Cell->getValue()->willReturn("ES-11111");
@@ -142,8 +142,8 @@ class RedsysStatementParserSpec extends ObjectBehavior
         $consignmentFinder->findConsignment($date1, "1234", 16.00)->willReturn($consignment1);
 
         $consignment2 = "2";
-        $dateString2 = "04/01/2017 11:12:13";
-        $date2 = \DateTime::createFromFormat('d/m/Y H:i:s', $dateString2);
+        $dateString2 = "04/01/2017";
+        $date2 = \DateTime::createFromFormat('d/m/Y', $dateString2);
         $a3Cell->getValue()->willReturn($dateString2);
         $c3Cell->getValue()->willReturn("Autorización");
         $d3Cell->getValue()->willReturn("ES-22222");
@@ -190,8 +190,8 @@ class RedsysStatementParserSpec extends ObjectBehavior
         Cell $a3Cell
     ) {
         $consignment1 = "1";
-        $dateString1 = "03/01/2017 11:10:13";
-        $date1 = \DateTime::createFromFormat('d/m/Y H:i:s', $dateString1);
+        $dateString1 = "03/01/2017";
+        $date1 = \DateTime::createFromFormat('d/m/Y', $dateString1);
         $a2Cell->getValue()->willReturn($dateString1);
         $c2Cell->getValue()->willReturn("Autorización");
         $d2Cell->getValue()->willReturn("ES-11111");

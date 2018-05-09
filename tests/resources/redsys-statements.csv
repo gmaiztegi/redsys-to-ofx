@@ -1,15 +1,15 @@
-Fecha;Nº de terminal;Tipo operación;Número de pedido;Resultado operación y código;Importe;Moneda;Importe Euros;Cierre de sesión;Nº Tarjeta;Titular
-06/03/2017 00:47:23;1;Autorización;ES-16918;Autorizada 136805;16.00;EUR;16.00;1/;535120******0025;ABC1;
-06/03/2017 08:43:23;1;Autorización;ES-16919;Sin Finalizar 9998;33.75;EUR;33.75;;;;
-06/03/2017 11:25:31;1;Autorización;FR-3701;Autorizada 983557;109.00;EUR;109.00;1/;513101******5694;ABC2;
-06/03/2017 11:40:37;1;Autorización;ES-16920;Autorizada 985882;16.00;EUR;16.00;1/;522661******1873;ABC3;
-06/03/2017 11:41:20;1;Autorización;FR-3703;Autorizada 000642;35.00;EUR;35.00;1/;495000******0798;ABC4;
-06/03/2017 12:41:37;1;Autorización;ES-16921;Autorizada 940217;16.00;EUR;16.00;1/;548901******9617;ABC5;
-06/03/2017 12:51:03;1;Autorización;ES-16922;Autorizada 985295;16.00;EUR;16.00;1/;417750******0293;ABC6;
-06/03/2017 13:12:16;1;Autorización;ES-16923;Autorizada 811858;16.00;EUR;16.00;1/;526389******3534;ABC7;
-06/03/2017 13:12:55;1;Autorización;ES-16924;Autorizada 671426;16.00;EUR;16.00;1/;425549******5000;ABC8;
-06/03/2017 13:43:01;1;Autorización;ES-16925;Autorizada 434738;16.00;EUR;16.00;1/;403642******9304;ABC9;
-06/03/2017 14:35:10;1;Autorización;FR-3705;Autorizada 927844;109.00;EUR;109.00;1/;497245******8897;ABC10;
-06/03/2017 15:17:38;1;Autorización;ES-16926;Autorizada 534286;42.00;EUR;42.00;1/;554027******6263;ABC11;
-06/03/2017 16:47:30;1;Autorización;DE-1392;Autorizada 270143;52.00;EUR;52.00;1/;457013******8200;ABC12;
-06/03/2017 18:01:49;1;Autorización;FR-3706;Autorizada 697929;36.38;GBP;35.00;1/;497401******6529;ABC13;
+Fecha;Hora;Nº de terminal;Tipo operación;Número de pedido;Resultado operación y código;Importe;Moneda;Importe Euros;Cierre de sesión;Nº Tarjeta;Titular
+06/03/2017;00:47:23;1;Autorización;ES-16918;Autorizada 136805;16.00;EUR;16.00;1/;535120******0025;ABC1;
+06/03/2017;08:43:23;1;Autorización;ES-16919;Sin Finalizar 9998;33.75;EUR;33.75;;;;
+06/03/2017;11:25:31;1;Autorización;FR-3701;Autorizada 983557;109.00;EUR;109.00;1/;513101******5694;ABC2;
+06/03/2017;11:40:37;1;Autorización;ES-16920;Autorizada 985882;16.00;EUR;16.00;1/;522661******1873;ABC3;
+06/03/2017;11:41:20;1;Autorización;FR-3703;Autorizada 000642;35.00;EUR;35.00;1/;495000******0798;ABC4;
+06/03/2017;12:41:37;1;Autorización;ES-16921;Autorizada 940217;16.00;EUR;16.00;1/;548901******9617;ABC5;
+06/03/2017;12:51:03;1;Autorización;ES-16922;Autorizada 985295;16.00;EUR;16.00;1/;417750******0293;ABC6;
+06/03/2017;13:12:16;1;Autorización;ES-16923;Autorizada 811858;16.00;EUR;16.00;1/;526389******3534;ABC7;
+06/03/2017;13:12:55;1;Autorización;ES-16924;Autorizada 671426;16.00;EUR;16.00;1/;425549******5000;ABC8;
+06/03/2017;13:43:01;1;Autorización;ES-16925;Autorizada 434738;16.00;EUR;16.00;1/;403642******9304;ABC9;
+06/03/2017;14:35:10;1;Autorización;FR-3705;Autorizada 927844;109.00;EUR;109.00;1/;497245******8897;ABC10;
+06/03/2017;15:17:38;1;Autorización;ES-16926;Autorizada 534286;42.00;EUR;42.00;1/;554027******6263;ABC11;
+06/03/2017;16:47:30;1;Autorización;DE-1392;Autorizada 270143;52.00;EUR;52.00;1/;457013******8200;ABC12;
+06/03/2017;18:01:49;1;Autorización;FR-3706;Autorizada 697929;36.38;GBP;35.00;1/;497401******6529;ABC13;
