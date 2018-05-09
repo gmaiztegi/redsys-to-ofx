@@ -1,19 +1,14 @@
 {
   "devDependencies": {
-    "@symfony/webpack-encore": "^0.16.0",
-    "autoprefixer": "^7.1.6",
+    "@symfony/webpack-encore": "^0.20.1",
+    "autoprefixer": "^8.4.1",
     "bootstrap-sass": "^3.3.7",
     "jquery": "^3.2.1",
-    "postcss-loader": "^2.0.8"
+    "node-sass": "^4.9.0",
+    "postcss-loader": "^2.1.5",
+    "sass-loader": "^7.0.1"
   },
   "browserslist": [
-    "Android 2.3",
-    "Android >= 4",
-    "Chrome >= 20",
-    "Firefox >= 24",
-    "Explorer >= 8",
-    "iOS >= 6",
-    "Opera >= 12",
-    "Safari >= 6"
+    "defaults"
   ]
 }
