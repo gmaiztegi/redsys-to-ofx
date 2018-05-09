@@ -39,6 +39,7 @@ class TransactionParserSpec extends ObjectBehavior
     function it_parses_the_files(RedsysStatementParser $redsysStatementParser, SabadellConsignmentParser $consignmentParser, TransactionFlattener $transactionFlattener, FinderKeyCreator $finderKeyCreator, XlsReader $excelReader, CsvReader $csvReader, File $consignmentFile, File $transactionFile, Spreadsheet $consignmentExcel, Worksheet $consignmentSheet, Spreadsheet $transactionExcel, Worksheet $transactionSheet)
     {
         $consignmentFilename = 'somefilename.xls';
+        $consignmentFile->beConstructedWith([$consignmentFilename, false]);
         $consignmentFile->getPathname()->willReturn($consignmentFilename);
         $excelReader->setReadDataOnly(true)->willReturn($csvReader);
         $excelReader->load($consignmentFilename)->willReturn($consignmentExcel);
@@ -50,6 +51,7 @@ class TransactionParserSpec extends ObjectBehavior
         $csvReader->setDelimiter(';')->shouldBeCalled();
         $csvReader->setReadDataOnly(true)->willReturn($csvReader);
         $transactionFilename = 'anotherfilename.csv';
+        $transactionFile->beConstructedWith([$transactionFilename, false]);
         $transactionFile->getPathname()->willReturn($transactionFilename);
         $csvReader->load($transactionFilename)->shouldBeCalled()->willReturn($transactionExcel);
         $transactionExcel->getActiveSheet()->willReturn($transactionSheet);
