@@ -1,6 +1,7 @@
 .env
 .editorconfig
 .web-server-pid
+chart
 docker
 Dockerfile
 docker-compose.yml
