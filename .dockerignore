@@ -1,7 +1,11 @@
 .env
+.editorconfig
 .web-server-pid
+docker
+Dockerfile
+docker-compose.yml
 node_modules
-var
-vendor
 public/bundles/*
 public/build/*
+var
+vendor
