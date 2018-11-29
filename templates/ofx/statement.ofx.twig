@@ -1,0 +1,57 @@
+OFXHEADER:100
+DATA:OFXSGML
+VERSION:102
+SECURITY:NONE
+ENCODING:UTF-8
+COMPRESSION:NONE
+OLDFILEUID:NONE
+NEWFILEUID:NONE
+
+<OFX>
+    <SIGNONMSGSRSV1>
+        <SONRS>
+            <STATUS>
+                <CODE>0</CODE>
+                <SEVERITY>INFO</SEVERITY>
+            </STATUS>
+            <DTSERVER>{{ "now" | date("YmdHis", false) }}</DTSERVER>
+            <LANGUAGE>ENG</LANGUAGE>
+        </SONRS>
+    </SIGNONMSGSRSV1>
+    <BANKMSGSRSV1>
+        <STMTTRNRS>
+            <TRNUID>0</TRNUID>
+            <STATUS>
+                <CODE>0</CODE>
+                <SEVERITY>INFO</SEVERITY>
+            </STATUS>
+            <STMTRS>
+                <CURDEF>EUR</CURDEF>
+                <BANKACCTFROM>
+                    <BANKID>Redsys</BANKID>
+                    <ACCTID>{{ commerce_code }}</ACCTID>
+                    <ACCTTYPE>CHECKING</ACCTTYPE>
+                </BANKACCTFROM>
+                <BANKTRANLIST>
+                    <DTSTART>{{ transactions|first.date | date("YmdHis", false) }}</DTSTART>
+                    <DTEND>{{ (transactions|last).date | date("YmdHis", false) }}</DTEND>
+{% for transaction in transactions %}
+                        <STMTTRN>
+                            <TRNTYPE>{{ (transaction.amount > 0) ? 'CREDIT' : 'DEBIT' }}</TRNTYPE>
+                            <DTPOSTED>{{ transaction.date | date("YmdHis", false) }}</DTPOSTED>
+                            <TRNAMT>{{ transaction.amount | number_format(2, '.', '') }}</TRNAMT>
+                            <FITID>{{ commerce_code }}:{{ transaction.code }}{{ (transaction.cardNumberLast is not empty) ? ':' ~ transaction.orderNumber ~ ':' ~ transaction.cardNumberLast : '' }}{{ (transaction.amount < 0 and transaction.cardNumberLast is not empty) ? ':REFUND' : '' }}</FITID>
+                            <REFNUM>{{ transaction.code }}</REFNUM>
+                            <NAME>{{ (transaction.payerName is not empty) ? transaction.payerName : transaction.code }}</NAME>
+                            <MEMO>{{ transaction.orderNumber }}{{ (transaction.originalCurrency != "EUR") ? ' (' ~ transaction.originalAmount ~ ' ' ~ transaction.originalCurrency ~ ')' }}</MEMO>
+                        </STMTTRN>
+{% endfor %}
+                    <LEDGERBAL>
+                        <BALAMT>0</BALAMT>
+                        <DTASOF>{{ (transactions|last).date | date("YmdHis", false) }}</DTASOF>
+                    </LEDGERBAL>
+                </BANKTRANLIST>
+            </STMTRS>
+        </STMTTRNRS>
+    </BANKMSGSRSV1>
+</OFX>

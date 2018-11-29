@@ -1,0 +1,18 @@
+default:
+    suites:
+        default:
+            contexts:
+                - FeatureContext:
+                    kernel: '@kernel'
+                - Behat\MinkExtension\Context\MinkContext
+
+    extensions:
+        Behat\MinkExtension:
+            files_path: tests/resources
+            sessions:
+                default:
+                    symfony2: ~
+        Behat\Symfony2Extension:
+            kernel:
+                bootstrap: features/bootstrap/bootstrap.php
+                class: App\Kernel

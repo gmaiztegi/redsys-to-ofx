@@ -1,0 +1,14 @@
+{
+  "devDependencies": {
+    "@symfony/webpack-encore": "^0.20.1",
+    "autoprefixer": "^8.4.1",
+    "bootstrap-sass": "^3.3.7",
+    "jquery": "^3.2.1",
+    "node-sass": "^4.9.0",
+    "postcss-loader": "^2.1.5",
+    "sass-loader": "^7.0.1"
+  },
+  "browserslist": [
+    "defaults"
+  ]
+}

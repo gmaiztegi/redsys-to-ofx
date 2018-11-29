@@ -1,0 +1,12 @@
+.env
+.editorconfig
+.web-server-pid
+chart
+docker
+Dockerfile
+docker-compose.yml
+node_modules
+public/bundles/*
+public/build/*
+var
+vendor
