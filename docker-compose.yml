@@ -16,6 +16,6 @@ services:
     build: .
     image: eu.gcr.io/mni-goingmerry/redsys-to-ofx
     volumes:
-      - "codebase:/var/www/app"
+    - "codebase:/var/www/app"
 volumes:
   codebase:
