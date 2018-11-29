@@ -13,7 +13,7 @@ RUN yarn install \
     && yarn run encore $(if [ "x${APP_ENV}" = "xprod" ] ; then echo production; else echo ${APP_ENV};fi)
 
 # Download PHP dependencies and build cache
-FROM gmaiztegi/php:7.2-fpm-alpine as build
+FROM gmaiztegi/nginx-php-fpm as build
 
 ARG APP_ENV=prod
 ARG APP_DEBUG=0
@@ -31,7 +31,7 @@ RUN composer install --no-dev \
     && bin/console cache:warmup
 
 # Lean final release image
-FROM gmaiztegi/php:7.2-fpm-alpine
+FROM gmaiztegi/nginx-php-fpm
 MAINTAINER Gorka Maiztegi <gorkamaiztegi@gik.blue>
 
 ARG APP_ENV=prod
@@ -41,9 +41,10 @@ ENV APP_DEBUG ${APP_DEBUG}
 
 WORKDIR /var/www/app
 
+RUN sed -i "s,root /var/www/app/\\;,root /var/www/app/public\\;," /etc/nginx/nginx.conf
 COPY . /var/www/app
 COPY --from=build /var/www/app/vendor /var/www/app/vendor
-COPY --from=build --chown=www-data:www-data /var/www/app/var /var/www/app/var
+COPY --from=build --chown=nginx:nginx /var/www/app/var /var/www/app/var
 COPY --from=node /var/www/app/public/build /var/www/app/public/build
 COPY --from=build /var/www/app/public/bundles /var/www/app/public/bundles
 
